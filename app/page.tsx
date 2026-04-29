@@ -67,7 +67,7 @@ export default async function Home() {
 
                 <div className="flex flex-col items-end">
                   <span className="bg-indigo-500/10 text-indigo-400 px-4 py-1.5 rounded-full text-sm font-bold border border-indigo-500/20 tabular-nums">
-                    ${item.Price}
+                    ₹{item.Price}
                   </span>
                 </div>
               </div>
