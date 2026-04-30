@@ -1,7 +1,9 @@
 import * as Papa from 'papaparse';
 
-const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/186KORDVuqOW_x6txorTajV2d8dGrKS6dmDCSJg_b_ME/export?format=csv';
+// URL to fetch the CSV data from the Google Sheet, stored in environment variables
+const GOOGLE_SHEET_CSV_URL = process.env.GOOGLE_SHEET_CSV_URL || 'https://docs.google.com/spreadsheets/d/186KORDVuqOW_x6txorTajV2d8dGrKS6dmDCSJg_b_ME/export?format=csv';
 
+// Define the structure of our product data
 interface Product {
   Title: string;
   Inventory: string;
@@ -10,9 +12,11 @@ interface Product {
 }
 
 export default async function Home() {
+  // Fetching data server-side without caching to ensure live sync
   const res = await fetch(GOOGLE_SHEET_CSV_URL, { cache: 'no-store' });
   const csvText = await res.text();
   
+  // Parse the CSV text into an array of Product objects
   const { data } = Papa.parse<Product>(csvText, {
     header: true,
     skipEmptyLines: true,

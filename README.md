@@ -1,5 +1,14 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Zapier Google Sheet Sync Project
 
+This Next.js application dynamically fetches and displays data directly from a Google Sheet. It parses the CSV export of a Google Sheet and presents the store inventory in real-time, allowing users to see up-to-date titles, descriptions, stock, and prices.
+
+## Features
+
+- **Live Sync**: Fetches data from Google Sheets on every load without caching.
+- **Modern UI**: Styled with Tailwind CSS to provide a clean and interactive user experience.
+- **Environment Variables**: Uses `.env` to securely manage the Google Sheet CSV URL configuration.
+
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 ## Getting Started
 
 First, run the development server:
