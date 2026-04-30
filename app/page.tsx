@@ -1,5 +1,3 @@
-import * as Papa from 'papaparse';
-
 // Define the structure of our product data
 interface Product {
   Title: string;
@@ -10,14 +8,26 @@ interface Product {
 
 export default async function Home() {
   // Fetching data server-side without caching to ensure live sync
-  const res = await fetch(process.env.GOOGLE_SHEET_CSV_URL as string, { cache: 'no-store' });
-  const csvText = await res.text();
+  const res = await fetch(process.env.GOOGLE_SHEET_JSON_URL as string, { cache: 'no-store' });
+  const text = await res.text();
   
-  // Parse the CSV text into an array of Product objects
-  const { data } = Papa.parse<Product>(csvText, {
-    header: true,
-    skipEmptyLines: true,
-  });
+  // The response from Google Sheets gviz is in the format: /*O_o*/\ngoogle.visualization.Query.setResponse({...});
+  // We need to extract the JSON payload
+  const jsonString = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]+)\);/);
+  
+  let data: Product[] = [];
+  if (jsonString && jsonString[1]) {
+    const json = JSON.parse(jsonString[1]);
+    
+    // Map the JSON structure to our Product interface
+    // Based on the columns: Title (0), Inventory (1), Price (2), Description (3)
+    data = json.table.rows.map((row: any) => ({
+      Title: row.c[0]?.v || '',
+      Inventory: row.c[1]?.v?.toString() || '0',
+      Price: row.c[2]?.v?.toString() || '0',
+      Description: row.c[3]?.v || '',
+    }));
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white p-8 font-sans selection:bg-blue-500/30">
